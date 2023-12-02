@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <unordered_map>
 
 const int red = 12;
 const int green = 13;

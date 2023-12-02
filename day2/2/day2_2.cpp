@@ -1,16 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <unordered_map>
-
-const int red = 12;
-const int green = 13;
-const int blue = 14;
 
 // controlla su una riga che ogni token 'numero + colore' rispetti le indicazioni
-bool check_cubes_color(const std::string& line, const std::regex& pattern) {
+int few_cubes_color(const std::string& line, const std::regex& pattern) {
 
-    bool valid_color = false;
+    int few_color = 0;
 
     std::smatch match;
     std::string::const_iterator searchStart(line.cbegin());
@@ -19,33 +14,22 @@ bool check_cubes_color(const std::string& line, const std::regex& pattern) {
     while (std::regex_search(searchStart, line.cend(), match, pattern)) {
 
         int n_cubes = std::stoi(match[1]);
-        std::string color = match[2];
-
-        if (color == "red" && n_cubes <= red) {
-            valid_color = true;
-        } else if (color == "green" && n_cubes <= green) {
-            valid_color = true;
-        } else if (color == "blue" && n_cubes <= blue) {
-            valid_color = true;
-        } else {
-            valid_color = false;
-            break;
+       
+        if (n_cubes > few_color) {
+            few_color = n_cubes;
         }
 
         searchStart = match.suffix().first;
 
     }
 
-    return valid_color;
+    return few_color;
 
 }
 
 int main() {
 
     int sum = 0;
-
-    bool valid_line = false;
-    int game_id = 0;
 
     std::regex pattern1("(\\d+)\\s+(red)");
     std::regex pattern2("(\\d+)\\s+(green)");
@@ -60,20 +44,13 @@ int main() {
 
         while (std::getline(file, line)) {
 
-            valid_line = false;
-            game_id++;
-
-            valid_line = ( 
-                            check_cubes_color(line, pattern1) &&
-                                check_cubes_color(line, pattern2) &&
-                                    check_cubes_color(line, pattern3)
-                    );
-
-            if (valid_line) {
-
-                sum += game_id;
-
-            }
+            int few_red = few_cubes_color(line, pattern1);
+            int few_green = few_cubes_color(line, pattern2);
+            int few_blue = few_cubes_color(line, pattern3);
+        
+            int set_power = (few_red * few_green * few_blue);
+            
+            sum += set_power;
 
         }
 
