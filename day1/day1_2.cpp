@@ -4,8 +4,8 @@
 
 int main() {
 
-    std::ifstream file("day1_input.txt");
-    // std::ifstream file("day1_2_input_example.txt");
+    std::ifstream file("inputs/day1_input.txt");
+    // std::ifstream file("inputs/day1_2_input_example.txt");
 
     std::unordered_map<int, std::string> digit_to_word = {
 

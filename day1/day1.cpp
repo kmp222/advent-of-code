@@ -3,8 +3,8 @@
 
 int main() {
 
-    std::ifstream file("day1_input.txt");
-    // std::ifstream file("day1_input_example.txt");
+    std::ifstream file("inputs/day1_input.txt");
+    // std::ifstream file("inputs/day1_input_example.txt");
 
     int sum = 0; // somma totale
 

@@ -35,8 +35,8 @@ int main() {
     std::regex pattern2("(\\d+)\\s+(green)");
     std::regex pattern3("(\\d+)\\s+(blue)");
 
-    std::ifstream file("day2_input.txt");
-    // std::ifstream file("day2_input_example.txt");
+    std::ifstream file("inputs/day2_input.txt");
+    // std::ifstream file("inputs/day2_input_example.txt");
 
     if (file.is_open()) {
 
