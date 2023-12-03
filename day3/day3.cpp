@@ -1,71 +1,33 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <regex>
 
-int righe = 10, colonne = 10;
-std::vector<std::vector<char>> matrix(righe, std::vector<char>(colonne));
+std::vector<std::string> matrix;
+int numRighe = 0;
+int numColonne = 0;
+int sum = 0;
 
-// popola matrice MxN a partire da un file di testo
 void populate_matrix(std::ifstream& file) {
 
-    char c;
-
-    // conta righe e colonne file
-    bool fine_colonne = false;
-
-    while (file.get(c)) {
-
-        if (c == '\n') {
-
-            ++righe;
-            fine_colonne = true;
-
-        } else if (!fine_colonne) {
-
-            ++colonne;
-
-        }
-
+    // leggi il file e salva ogni riga nel vettore
+    std::string riga;
+    while (std::getline(file, riga)) {
+        matrix.push_back(riga);
     }
 
-    std::cout << righe << std::endl;
-    std::cout << colonne << std::endl;
+    file.close();
 
-    // resetta la posizione del file
-    file.clear();
-    file.seekg(0, std::ios::beg);
-
-    // Ridimensiona la matrice
-    matrix.resize(righe, std::vector<char>(colonne));
-
-    // popola la matrice
-    for (int i = 0; i < righe; ++i) {
-
-        for (int j = 0; j < colonne; ++j) {
-
-            char c;
-
-            while (c == '\n') {
-                file.get(c);
-            }
-            
-            std::cout << i << " " << j << std::endl;
-
-            matrix[i][j] = c;
-
-        }
-
-
-
-    }
+    // determina il numero di righe e colonne
+    numRighe = matrix.size();
+    numColonne = (numRighe > 0) ? matrix[0].size() : 0;
 
 }
 
-// for debugging
 void print_matrix() {
 
-    for (int i = 0; i < righe; i++) {
-        for (int j = 0; j < colonne; j++) {
+    for (int i = 0; i < numRighe; i++) {
+        for (int j = 0; j < numColonne; j++) {
             std::cout << matrix[i][j] << " ";
         }
         std::cout << std::endl;
@@ -73,17 +35,125 @@ void print_matrix() {
 
 }
 
+bool is_part_number(int start, int end, int riga_indexed) {
+ 
+        if (riga_indexed != 0 && riga_indexed < numRighe-1) { // numeri non sulla prima e ultima linea
+
+            // check laterale
+            if ( !( matrix[riga_indexed][start-1] == '.' &&
+                matrix[riga_indexed][end+1] == '.' ) ) {  
+                return true;
+            }
+
+            // check linea sopra
+            for (int i = start-1; i < end+2; i++) {
+
+                if ( !(std::isdigit(matrix[riga_indexed-1][i]) ||
+                        matrix[riga_indexed-1][i] == '.' ) ) {
+                        return true;
+
+                }
+
+            }
+            
+            // check linea sotto
+            for (int i = start-1; i < end+2; i++) {
+
+                if ( !(std::isdigit(matrix[riga_indexed+1][i]) ||
+                        matrix[riga_indexed+1][i] == '.' ) ) {
+                        return true;
+
+                }
+
+            }
+
+        } else if (riga_indexed == 0) { // numeri sulla prima linea
+
+            // check laterale
+            if ( !( matrix[riga_indexed][start-1] == '.' &&
+                matrix[riga_indexed][end+1] == '.' ) ) {  
+                return true;
+            }
+
+            // check linea sotto
+            for (int i = start-1; i < end+2; i++) {
+
+                if ( !(std::isdigit(matrix[riga_indexed+1][i]) ||
+                        matrix[riga_indexed+1][i] == '.' ) ) {
+                        return true;
+
+                }
+
+            }
+
+        } else if (riga_indexed == numRighe-1) { // numeri sull'ultima linea
+
+            // check laterale
+            if ( !( matrix[riga_indexed][start-1] == '.' &&
+                matrix[riga_indexed][end+1] == '.' ) ) {  
+                return true;
+            }
+
+            // check linea sopra
+            for (int i = start-1; i < end+2; i++) {
+
+                if ( !(std::isdigit(matrix[riga_indexed-1][i]) ||
+                        matrix[riga_indexed-1][i] == '.' ) ) {
+                        return true;
+
+                }
+
+            }
+
+        }
+
+    return false;
+
+}
+
+
 int main() {
 
-    std::ifstream file("inputs/day3_input_example.txt");
+    // input modificato : aggiunta '.' a inizio e fine di ogni riga
+    std::ifstream file("inputs/day3_input.txt");
+    // std::ifstream file("inputs/day3_input_example.txt");
     
     if (file.is_open()) {
 
         populate_matrix(file);
-        print_matrix();
-        file.close();
+        // print_matrix();
+
+        std::regex pattern(R"(\d+)");
+        std::smatch match;
+
+        for (int i = 0; i < numRighe; i++) {
+
+            std::string::const_iterator searchStart(matrix[i].cbegin());
+
+            while (std::regex_search(searchStart, matrix[i].cend(), match, pattern)) {
+
+                int start = std::distance(matrix[i].cbegin(), searchStart) + match.position();
+                int end = start + match.length() - 1;
+
+                if (is_part_number(start, end, i)) {
+
+                    int numero = std::stoi(match[0]);
+                    std::cout << numero << std::endl;
+                    sum += numero;
+
+                }
+
+                searchStart = match.suffix().first;
+
+            }
+
+        }
 
     }
+
+    file.close();
+
+    std::cout << sum << std::endl;
 
     return 0;
 
