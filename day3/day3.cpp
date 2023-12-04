@@ -100,7 +100,6 @@ int main() {
                 if (is_part_number(start, end, i)) {
 
                     int numero = std::stoi(match[0]);
-                    std::cout << numero << std::endl;
                     sum += numero;
 
                 }
