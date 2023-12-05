@@ -214,7 +214,6 @@ int main() {
         {3596423501, 4198352516, 96614780}
     };
 
-    // seed to soil
     for (int i = 0; i < seeds.size(); i++) {
 
         convert(seeds[i], seed_to_soil);
