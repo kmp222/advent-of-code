@@ -75,52 +75,41 @@ int get_wins(std::vector<int>& my_nums, std::vector<int>& w_nums) {
 
 }
 
-std::vector<std::string> read_lines(const std::string& filename) {
-
-    std::ifstream file(filename);
-    std::vector<std::string> lines;
-
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline(file, line)) {
-            lines.push_back(line);
-        }
-        file.close();
-    } else {
-        std::cerr << "err"<< std::endl;
-    }
-
-    return lines;
-
-}
-
-
 int main() {
 
-    file_lines = read_lines("inputs/day4_input.txt");
-    // file_lines = read_lines("inputs/day4_input_example.txt");
+    std::ifstream file("inputs/day4_input.txt");
+    // std::ifstream file("inputs/day4_input_example.txt");
 
-    std::vector<int> matches;
-    std::vector<int> total;
+    std::string line;
 
-    for (int i = 0; i < file_lines.size(); i++) {
+    std::vector<int> matches; // # match numeri del grattaevinci
+    std::vector<int> total; // # grattevinci tot
+
+    if (file.is_open()) {
+
+        while (std::getline(file, line)) {
         
-        std::vector<int> my_nums;
-        std::vector<int> w_nums;
-        std::vector<std::string> tokens;
+            std::vector<int> my_nums;
+            std::vector<int> w_nums;
+            std::vector<std::string> tokens;
 
-        create_scratchcards(file_lines[i], my_nums, w_nums, tokens);
+            create_scratchcards(line, my_nums, w_nums, tokens);
 
-        int wins = get_wins(my_nums, w_nums);
-        matches.push_back(wins);
-        total.push_back(1);
+            int wins = get_wins(my_nums, w_nums);
+            matches.push_back(wins);
+            total.push_back(1); // almeno 1 c'è
+
+        }
 
     }
 
+    file.close();
+    
     for (int i = 0; i < total.size(); i++) {
 
         for (int j = 0; j < matches[i]; j++) {
-
+            
+            // aggiorno # grattaevinci in base ai match di quello corrente
             total[i+j+1] = total[i+j+1] + total[i];
 
         }
