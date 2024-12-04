@@ -69,8 +69,6 @@ int main() {
 
     if (file.is_open()) {
         
-        int i = 0;
-        
         while (std::getline(file, line)) {
 
             std::istringstream iss(line);
@@ -81,7 +79,6 @@ int main() {
             }
 
             numbers.push_back(row);
-            i++;
 
         }
 
