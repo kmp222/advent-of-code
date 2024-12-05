@@ -13,6 +13,11 @@
     }
 } */
 
+/* for (int i; ss >> i;) {
+        vect.push_back(i);    
+        if (ss.peek() == ',')
+            ss.ignore();
+    }*/
 int main() {
 
     std::fstream file("inputs/input.txt");
@@ -21,7 +26,7 @@ int main() {
         std::string line;
         while (std::getline(file, line)) {
             
-            /* std::string line;
+            /*
             while (std::getline(file, line)) {
                 std::istringstream iss(line);
                 char c;
