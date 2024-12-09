@@ -9,7 +9,7 @@ std::vector<int> disk;
 
 int main() {
 
-    std::fstream file("inputs/input_ex.txt");
+    std::fstream file("inputs/input.txt");
     bool is_file = true;
 
     if (file.is_open()) {
@@ -45,8 +45,8 @@ int main() {
 
         bool has_been_checked = false;
 
-        for (auto &i : checkedIDs) {
-            if (disk[i] == i) {
+        for (auto &id : checkedIDs) {
+            if (disk[i] == id) {
                 has_been_checked = true;
                 break;
             }
@@ -78,12 +78,16 @@ int main() {
         while (j < disk.size() && i >= 0) {
 
             int space_size = 0;
-        
+
             while (j < disk.size() && disk[j] != -1) {
                 j++;
             }
 
             int space_start = j;
+
+            if (space_start >= i) {
+                break;
+            }
 
             while (j < disk.size() && disk[j] == -1) {
                 space_size++;
@@ -92,20 +96,17 @@ int main() {
 
             if (space_size >= file_size) {
 
-                for (int k = 0; k < file_size; k++) {
-                    disk[i+1+k] = -1;
-                    disk[space_start+k] = file_ID;
-                }
+            for (int k = 0; k < file_size; k++) {
+                disk[i+1+k] = -1;
+                disk[space_start+k] = file_ID;
+            }
 
-                break;
+            break;
 
             }
 
         }
 
-        for (int i : disk) std::cout << i << " ";
-        std::cout << std::endl;
-        
     }
 
     long long res = 0;
