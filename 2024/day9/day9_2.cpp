@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <set>
 
 std::vector<int> disk;
 
@@ -34,22 +35,30 @@ int main() {
     }
     
     file.close();
+
     int i = disk.size()-1;
     int file_ID = 0;
 
+    std::set<int> checkedIDs;
+
     while (i >= 0) {
 
-        if (i == disk.size()-1) {
-            file_ID = disk[i];
-        } else {
-            if (disk[i] < file_ID) file_ID = disk[i];
-            else {
-                file_ID = 0;
-                i--;
+        bool has_been_checked = false;
+
+        for (auto &i : checkedIDs) {
+            if (disk[i] == i) {
+                has_been_checked = true;
+                break;
             }
         }
 
-        if (file_ID == 0) continue;
+        if (disk[i] != -1 && !has_been_checked) {
+            file_ID = disk[i];
+            checkedIDs.insert(file_ID);
+        } else {
+            i--;
+            continue;
+        }
 
         int file_size = 0;
 
@@ -66,7 +75,7 @@ int main() {
         
         int j = 0;
 
-        while (j < disk.size() && i > 0) {
+        while (j < disk.size() && i >= 0) {
 
             int space_size = 0;
         
@@ -93,6 +102,9 @@ int main() {
             }
 
         }
+
+        for (int i : disk) std::cout << i << " ";
+        std::cout << std::endl;
         
     }
 
