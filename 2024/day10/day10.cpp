@@ -10,7 +10,7 @@ int result = 0;
 std::vector<std::vector<int>> matrix;
 std::set<std::pair<int, int>> explored;
 
-void dfs(std::pair<int, int> trailhead) {
+void bfs(std::pair<int, int> trailhead) {
 
     std::queue<std::pair<int, int>> queue;
     explored.insert(trailhead);
@@ -87,7 +87,7 @@ int main() {
 
             if (matrix[i][j] == 0) {
                 std::pair<int, int> p(i, j);
-                dfs(p);
+                bfs(p);
                 explored.clear();
             }
 
