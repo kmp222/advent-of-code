@@ -149,7 +149,7 @@ int main() {
     for (int i = 0; i < 25; i++) {
         n = stones.head;
         iter_blink(n);
-        std::cout << i << " blink: ";
+        std::cout << i << " blink";
     }
 
     int res = 0;
